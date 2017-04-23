@@ -28,6 +28,23 @@ var albumPicasso = {
       ]
   };
 
+  var albumACDC = {
+       title: 'Black Label',
+       artist: 'AC DC',
+       label: 'Rock',
+       year: '1970',
+       albumArtUrl: 'assets/images/album_covers/19.png',
+       songs: [
+           { title: 'Back in Black', duration: '5:01' },
+           { title: 'TNT', duration: '3:35' },
+           { title: 'Shoot to Thrill', duration: '4:41'},
+           { title: 'Shook Me All Night Long', duration: '5:14' },
+           { title: 'Big Balls', duration: '3:22'}
+       ]
+   };
+
+
+
   var createSongRow = function(songNumber, songName, songLength) {
        var template =
           '<tr class="album-view-song-item">'
@@ -40,29 +57,38 @@ var albumPicasso = {
        return template;
    };
 
+var albumTitle = document.getElementsByClassName('album-view-title')[0];
+var albumArtist = document.getElementsByClassName('album-view-artist')[0];
+var albumReleaseInfo = document.getElementsByClassName('album-view-release-info')[0];
+var albumImage = document.getElementsByClassName('album-cover-art')[0];
+var albumSongList = document.getElementsByClassName('album-view-song-list')[0];
+
    var setCurrentAlbum = function(album) {
 
-        var albumTitle = document.getElementsByClassName('album-view-title')[0];
-        var albumArtist = document.getElementsByClassName('album-view-artist')[0];
-        var albumReleaseInfo = document.getElementsByClassName('album-view-release-info')[0];
-        var albumImage = document.getElementsByClassName('album-cover-art')[0];
-        var albumSongList = document.getElementsByClassName('album-view-song-list')[0];
+    albumTitle.firstChild.nodeValue = album.title;
+    albumArtist.firstChild.nodeValue = album.artist;
+    albumReleaseInfo.firstChild.nodeValue = album.year + ' ' + album.label;
+    albumImage.setAttribute('src', album.albumArtUrl);
 
 
-        albumTitle.firstChild.nodeValue = album.title;
-        albumArtist.firstChild.nodeValue = album.artist;
-        albumReleaseInfo.firstChild.nodeValue = album.year + ' ' + album.label;
-        albumImage.setAttribute('src', album.albumArtUrl);
+    albumSongList.innerHTML = '';
 
 
-        albumSongList.innerHTML = '';
-
-
-        for (var i = 0; i < album.songs.length; i++) {
-            albumSongList.innerHTML += createSongRow(i + 1, album.songs[i].title, album.songs[i].duration);
-        }
-    };
+    for (var i = 0; i < album.songs.length; i++) {
+         albumSongList.innerHTML += createSongRow(i + 1, album.songs[i].title, album.songs[i].duration);
+     }
+ };
 
 window.onload = function() {
     setCurrentAlbum(albumPicasso);
+
+    var albums = [albumPicasso, albumMarconi, albumACDC];
+    var next = 1;
+    albumImage.addEventListener("click", function(event) {
+        setCurrentAlbum(albums[next]);
+        next++;
+        if (next == albums.length) {
+            next = 0;
+        }
+    });
 };
