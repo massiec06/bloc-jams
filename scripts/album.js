@@ -28,6 +28,15 @@ var albumPicasso = {
       ]
   };
 
+  var currentlyPlayingSong = function(songNumber) {
+        currentlyPlayingSong = parseInt(songNumber);
+        currentSongFromAlbum = currentAlbum.songs[songNumber-1];
+  };
+
+  var getSongNumberCell = function(number) {
+    return $('.song-item-number[data-song-number="' + number + '"]');
+  };
+
   var createSongRow = function(songNumber, songName, songLength) {
        var template =
           '<tr class="album-view-song-item">'
@@ -41,7 +50,7 @@ var albumPicasso = {
        var clickHandler = function() {
          var songItem = $(this).attr('data-song-number')
          if(currentlyPlayingSong !== null) {
-            var playingSong = $('.song-item-number[data-song-number="' + currentlyPlayingSong + '"]');
+            var playingSong = getSongNumberCell(currentlyPlayingSong);
             playingSong.html(currentlyPlayingSong);
          }
          if (currentlyPlayingSong !== songNumber) {
