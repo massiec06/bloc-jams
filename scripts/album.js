@@ -28,12 +28,12 @@ var albumPicasso = {
       ]
   };
 
-  var currentlyPlayingSong = function(songNumber) {
-        currentlyPlayingSong = parseInt(songNumber);
+  var setSong = function(songNumber) {
+        currentlyPlayingSongNumberNumber = parseInt(songNumber);
         currentSongFromAlbum = currentAlbum.songs[songNumber-1];
   };
 
-  var getSongNumberCell = function(number) {
+  var createSongRow = function(number) {
     return $('.song-item-number[data-song-number="' + number + '"]');
   };
 
@@ -49,23 +49,23 @@ var albumPicasso = {
        var $row = $(template);
        var clickHandler = function() {
          var songItem = $(this).attr('data-song-number')
-         if(currentlyPlayingSong !== null) {
-            var playingSong = getSongNumberCell(currentlyPlayingSong);
-            playingSong.html(currentlyPlayingSong);
+         if(currentlyPlayingSongNumber !== null) {
+            var playingSong = getSongNumberCell(currentlyPlayingSongNumber);
+            playingSong.html(currentlyPlayingSongNumber);
          }
-         if (currentlyPlayingSong !== songNumber) {
+         if (currentlyPlayingSongNumber !== songNumber) {
 		        $(this).html(pauseButtonTemplate);
-		        currentlyPlayingSong = songNumber;
-	       } else if (currentlyPlayingSong === songNumber) {
+		        setSong(songNumber);
+	       } else if (currentlyPlayingSongNumber === songNumber) {
 		        $(this).html(playButtonTemplate);
-		        currentlyPlayingSong = null;
+		        currentlyPlayingSongNumber = null;
 	}
        };
        var onHover = function(event) {
          var songPlace = $(this).find('.song-item-number');
          var songNum = songPlace.attr('data-song-number');
 
-         if (songNum !== currentlyPlayingSong) {
+         if (songNum !== currentlyPlayingSongNumber) {
            songPlace.html(playButtonTemplate);
          }
        };
@@ -73,7 +73,7 @@ var albumPicasso = {
          var songPlace = $(this).find('.song-item-number');
          var songNum = songPlace.attr('data-song-number');
 
-         if (songNum !== currentlyPlayingSong) {
+         if (songNum !== currentlyPlayingSongNumber) {
             songPlace.html(songNumber);
           }
        };
@@ -108,17 +108,17 @@ var albumPicasso = {
 
 var clickHandler = function(targetElement) {
     var songItem = getSongItem(targetElement);
-    if (currentlyPlayingSong === null) {
+    if (currentlyPlayingSongNumber === null) {
          songItem.innerHTML = pauseButtonTemplate;
-         currentlyPlayingSong = songItem.getAttribute('data-song-number');
-     }else if (currentlyPlayingSong === songItem.getAttribute('data-song-number')) {
+         setSong(songItem.getAttribute('data-song-number'));
+     }else if (currentlyPlayingSongNumber === songItem.getAttribute('data-song-number')) {
          songItem.innerHTML = playButtonTemplate;
-         currentlyPlayingSong = null;
-     }else if (currentlyPlayingSong !== songItem.getAttribute('data-song-number')) {
-         var currentlyPlayingSongElement = document.querySelector('[data-song-number="' + currentlyPlayingSong + '"]');
-         currentlyPlayingSongElement.innerHTML = currentlyPlayingSongElement.getAttribute('data-song-number');
+         currentlyPLayingSongNumber = null;
+     }else if (currentlyPlayingSongNumber !== songItem.getAttribute('data-song-number')) {
+         var currentlyPlayingSongNumberElement = document.querySelector('[data-song-number="' + currentlyPlayingSongNumber + '"]');
+         currentlyPlayingSongNumberElement.innerHTML = currentlyPlayingSongNumberElement.getAttribute('data-song-number');
          songItem.innerHTML = pauseButtonTemplate;
-         currentlyPlayingSong = songItem.getAttribute('data-song-number');
+         setSong(songItem.getAttribute('data-song-number'));
      }
  };
 
@@ -128,7 +128,7 @@ var clickHandler = function(targetElement) {
 var playButtonTemplate = '<a class="album-song-button"><span class="ion-play"></span></a>';
 var pauseButtonTemplate = '<a class="album-song-button"><span class="ion-pause"></span></a>';
 
-var currentlyPlayingSong = null;
+var currentlyPlayingSongNumber = null;
 
 
 $(document).ready(function() {
