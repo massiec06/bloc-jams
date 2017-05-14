@@ -211,6 +211,7 @@ var setupSeekBars = function() {
 
             updateSeekPercentage($seekBar, seekBarFillRatio);
         });
+      });
 };
 
 var trackIndex = function(album, song) {
@@ -333,5 +334,5 @@ $(document).ready(function() {
     $previousButton.click(previousSong);
     $nextButton.click(nextSong);
     $controller.click(togglePlayFromPlayerBar);
-    setupSeekBars();
+    setupSeekBars()
 });
