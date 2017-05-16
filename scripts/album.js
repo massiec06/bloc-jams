@@ -42,7 +42,7 @@ var setSong = function(songNumber) {
           '<tr class="album-view-song-item">'
         + '  <td class="song-item-number" data-song-number="' + songNumber + '">' + songNumber + '</td>'
         + '  <td class="song-item-title">' + songName + '</td>'
-        + '  <td class="song-item-duration">' + songLength + '</td>'
+        + '  <td class="song-item-duration">' + filterTimeCode(songLength) + '</td>'
         + '</tr>'
       // };
 
@@ -50,7 +50,6 @@ var setSong = function(songNumber) {
 
        var clickHandler = function() {
         //  var songNumber = $(this).attr('data-song-number');
-         console.log(songNumber, currentlyPlayingSongNumber)
          if(currentlyPlayingSongNumber !== null) {
             var playingSong = getSongNumberCell(currentlyPlayingSongNumber);
             playingSong.html(currentlyPlayingSongNumber);
@@ -65,16 +64,19 @@ var setSong = function(songNumber) {
             var $volumeThumb = $('.volume .thumb');
             $volumeFill.width(currentVolume + '%');
             $volumeThumb.css({left: currentVolume + '%'});
+            updateSeekBarWhileSongPlays();
 	       } else if (currentlyPlayingSongNumber === songNumber) {
            if (currentSoundFile.isPaused()) {
                 $(this).html(pauseButtonTemplate);
                 $controller.html(playerBarPauseButton);
                 currentSoundFile.play();
+                updateSeekBarWhileSongPlays();
             }else{
-                setSong(null);
+                //setSong(null);
                 $(this).html(playButtonTemplate);
                 $controller.html(playerBarPlayButton);
                 currentSoundFile.pause();
+                updateSeekBarWhileSongPlays();
             }
 	       }
          updatePlayerBarSong();
@@ -91,7 +93,6 @@ var setSong = function(songNumber) {
        var offHover = function(event) {
          var songPlace = $(this).find('.song-item-number');
          var songNum = parseInt(songPlace.attr('data-song-number'));
-         console.log(songNum, currentlyPlayingSongNumber)
          if (songNum !== currentlyPlayingSongNumber) {
             songPlace.html(songNumber);
           }
@@ -134,9 +135,20 @@ var updateSeekBarWhileSongPlays = function() {
              var $seekBar = $('.seek-control .seek-bar');
 
              updateSeekPercentage($seekBar, seekBarFillRatio);
+             setCurrentTimeInPlayerBar(this.getTime());
          });
      }
  };
+
+ var setCurrentTimeInPlayerBar = function(currentTime) {
+    var $timeElement = $('.current-time');
+    $timeElement.text(filterTimeCode(currentTime));
+ }
+
+ var setTotalTimeInPlayerBar = function(totalTime) {
+   var $timeElement = $('.total-time');
+   $timeElement.text(filterTimeCode(totalTime));
+ }
 
 var updateSeekPercentage = function($seekBar, seekBarFillRatio) {
         var offsetXPercent = seekBarFillRatio * 100;
@@ -211,6 +223,7 @@ var setupSeekBars = function() {
 
             updateSeekPercentage($seekBar, seekBarFillRatio);
         });
+      });
 };
 
 var trackIndex = function(album, song) {
@@ -222,7 +235,8 @@ var updatePlayerBarSong = function() {
       $('.currently-playing .song-name').text(currentSongFromAlbum.title);
       $('.currently-playing .artist-name').text(currentAlbum.artist);
       $('.currently-playing .artist-song-mobile').text(currentSongFromAlbum.title + " - " + currentAlbum.artist);
-      $('.main-controls .play-pause').html(playerBarPauseButton);
+      
+      setTotalTimeInPlayerBar(currentSongFromAlbum.duration);
 };
 
 // var clickHandler = function(targetElement) {
@@ -312,7 +326,7 @@ var togglePlayFromPlayerBar = function() {
   console.log('in togglePlayFromPlayerBar', currentlyPlayingSongNumber);
   if (currentlyPlayingSongNumber === null) {
       setSong(1);
-      // currentSoundFile.play();
+      //currentSoundFile.play();
   }
 
   var currentlyPlayingCell = getSongNumberCell(currentlyPlayingSongNumber);
@@ -335,3 +349,15 @@ $(document).ready(function() {
     $controller.click(togglePlayFromPlayerBar);
     setupSeekBars();
 });
+
+var filterTimeCode = function(timeInSeconds) {
+  var timeInSeconds = parseFloat(timeInSeconds);
+  var minutes = Math.floor(timeInSeconds / 60);
+  var seconds = Math.floor(timeInSeconds % 60);
+  if (seconds < 10) {
+    var songTime = minutes + ':' + 0 + seconds;
+  }else{
+    var songTime = minutes + ':' + seconds;
+  }
+  return songTime;
+}
