@@ -235,7 +235,7 @@ var updatePlayerBarSong = function() {
       $('.currently-playing .song-name').text(currentSongFromAlbum.title);
       $('.currently-playing .artist-name').text(currentAlbum.artist);
       $('.currently-playing .artist-song-mobile').text(currentSongFromAlbum.title + " - " + currentAlbum.artist);
-      
+
       setTotalTimeInPlayerBar(currentSongFromAlbum.duration);
 };
 
@@ -289,6 +289,7 @@ var nextSong = function() {
     // currentSongFromAlbum = currentAlbum.songs[currentSongIndex];
 
     updatePlayerBarSong();
+    updateSeekBarWhileSongPlays();
 
     var $nextSongNumberCell = getSongNumberCell(currentlyPlayingSongNumber);
     var $lastSongNumberCell = getSongNumberCell(lastSongNumber);
@@ -312,6 +313,7 @@ var previousSong = function() {
     // currentSongFromAlbum = currentAlbum.songs[currentSongIndex];
 
     updatePlayerBarSong();
+    updateSeekBarWhileSongPlays();
 
     $('.main-controls .play-pause').html(playerBarPauseButton);
 
